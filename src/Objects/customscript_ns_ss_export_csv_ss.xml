@@ -1,0 +1,24 @@
+<scheduledscript scriptid="customscript_ns_ss_export_csv_ss">
+  <description></description>
+  <isinactive>F</isinactive>
+  <name>NetSuite Saved Search Export CSV SS</name>
+  <notifyadmins>F</notifyadmins>
+  <notifyemails></notifyemails>
+  <notifyowner>T</notifyowner>
+  <scriptfile>[/SuiteScripts/NetSuite Saved Search Export CSV/NetSuiteSavedSearchExportCSV_SS.js]</scriptfile>
+  <scriptdeployments>
+    <scriptdeployment scriptid="customdeploy1">
+      <isdeployed>T</isdeployed>
+      <loglevel>DEBUG</loglevel>
+      <status>NOTSCHEDULED</status>
+      <title>NetSuite Saved Search Export CSV SS</title>
+      <recurrence>
+        <single>
+          <repeat></repeat>
+          <startdate>2023-12-26</startdate>
+          <starttime>16:00:00Z</starttime>
+        </single>
+      </recurrence>
+    </scriptdeployment>
+  </scriptdeployments>
+</scheduledscript>

@@ -2,15 +2,13 @@
  * @NApiVersion 2.1
  * @NScriptType ScheduledScript
  */
-define(['N/search', 'N/file'],
+define(['N/search', 'N/file', './lib/csv'],
     
-    (search, file) => {
+    (search, file, csv) => {
 
-        const savedSearchId = 'customsearch_de_taf_ap_b6';
+        const savedSearchId = 'customsearch_xxxxxxx';
         const csvFileName = 'SavedSearchExport.csv';
         const csvFolderId = 146875;
-        const csvNewLine = '\r\n'
-        const csvDelimiter = ',';
 
         /**
          * Defines the Scheduled script trigger point.
@@ -20,17 +18,18 @@ define(['N/search', 'N/file'],
          */
         const execute = (scriptContext) => {
             const savedSearchResults = getSavedSearchResults(loadSearch(savedSearchId));
+            const savedSearchResultsStringified = csv.stringify(savedSearchResults.rows);
 
             const fileObj = file.create({
                 name: csvFileName,
                 fileType: file.Type.CSV,
-                contents: savedSearchResults.columns.join(csvDelimiter) + csvNewLine,
+                contents: '',
                 folder: csvFolderId
             });
 
-            savedSearchResults.rows.forEach(function (line) {
+            savedSearchResultsStringified.split('\r\n').forEach(function (line) {
                 fileObj.appendLine({
-                    value: line.join(csvDelimiter) + csvNewLine
+                    value: line
                 });
             })
 
@@ -39,18 +38,25 @@ define(['N/search', 'N/file'],
 
         const getSavedSearchResults = (savedSearch) => {
             const rows = [];
+            const columns = [];
+
+            savedSearch.columns.forEach(function (column) {
+                columns.push(column.label);
+            })
+
+            rows.push(columns);
 
             savedSearch.rows.forEach(savedSearchResult => {
-                let row = [];
+                const row = [];
 
-                savedSearch.columns.forEach(column, index => {
-                    row[index] = savedSearchResult.getValue({name: column})
+                savedSearch.columns.forEach(function (column, index) {
+                    row[index] = savedSearchResult.getValue({name: column});
                 });
 
-                rows.push(row)
+                rows.push(row);
             });
 
-            return {rows: rows, columns: savedSearch.columns};
+            return {rows: rows};
         }
 
         const loadSearch = (searchId) => {
